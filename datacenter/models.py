@@ -1,16 +1,7 @@
 from django.db import models
 import datetime
 from django.utils import timezone
-
-
-def format_duration(duration):
-    hours = f'{int(duration // 3600)}'
-    minutes = f'{int((duration % 3600) // 60)}'
-    if int(minutes) < 10:
-        minutes = f'0{minutes}'
-    if int(hours) < 10:
-        hours = f'0{hours}'
-    return f'{hours}:{minutes}'
+from datacenter.format_duration import format_duration
 
 
 class Passcard(models.Model):
@@ -49,6 +40,7 @@ class Visit(models.Model):
         return seconds.total_seconds()
 
     def is_visit_long(self, minutes=60):
-        if int(format_duration(self.get_duration()).partition(':')[0]) * 60 + int(format_duration(self.get_duration()).partition(':')[2]) > minutes:
+        delta_minutes = format_duration(self.get_duration()).split(":")
+        if int(delta_minutes[0]) * 60 + int(delta_minutes[1]) > minutes:
             return True
         return False

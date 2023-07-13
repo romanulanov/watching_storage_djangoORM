@@ -41,6 +41,5 @@ class Visit(models.Model):
 
     def is_visit_long(self, minutes=60):
         delta_minutes = format_duration(self.get_duration()).split(":")
-        if int(delta_minutes[0]) * 60 + int(delta_minutes[1]) > minutes:
-            return True
-        return False
+        return int(delta_minutes[0]) * 60 + int(delta_minutes[1]) > minutes
+        
